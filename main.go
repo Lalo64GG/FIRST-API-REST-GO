@@ -1,43 +1,22 @@
 package main
 
 import (
-	"net/http"
-	"github.com/gin-gonic/gin"
+    "github.com/gin-gonic/gin"
+    "github.com/api-rest-go/src/handlers"
 )
 
-// Define the 'album' struct
-type album struct {
-	ID     string `json:"id"`
-	Title  string `json:"title"`
-	Artist string `json:"artist"`
-	Year   int    `json:"year"`
-}
-
-// Sample data of albums
-var albums = []album{
-	{ID: "1", Title: "Familia", Artist: "Camila Cabello", Year: 2004},
-	{ID: "2", Title: "21", Artist: "Adele", Year: 2004},
-	{ID: "3", Title: "The Eminem Show", Artist: "Eminem", Year: 2004},
-}
-
-// Handler for the '/albums' route
-func getAlbums(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, albums)
-}
-
-// Handler for the root route '/'
-func helloWorld(c *gin.Context) {
-	c.String(http.StatusOK, "Hello world, this is my first API REST in GO")
-}
-
 func main() {
-	// Initialize Gin router
-	router := gin.Default()
+    // Inicializar el router Gin
+    router := gin.Default()
 
-	// Define routes and their handlers
-	router.GET("/", helloWorld)
-	router.GET("/albums", getAlbums)
+    // Definir rutas y sus handlers
+    router.GET("/", func(c *gin.Context) {
+        c.String(200, "Hello world, this is my first API REST in GO")
+    })
+    router.GET("/albums", handlers.GetAlbums)
+    router.GET("/album/:id", handlers.GetAlbumByID)
+    router.POST("/album", handlers.PostAlbums)
 
-	// Start the server on port 8080
-	router.Run("localhost:8080")
+    // Iniciar el servidor en el puerto 8080
+    router.Run("localhost:8080")
 }
